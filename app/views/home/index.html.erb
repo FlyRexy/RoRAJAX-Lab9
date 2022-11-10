@@ -1,0 +1,45 @@
+<div class = 'container'>
+  <div class = "row">
+    <div class = 'col-3'>
+      <br>
+      <%= form_tag("home/result.json", :method => "get", remote:true, id:'index_form') do %>
+        <%= label_tag("Input number of elements in array") %>
+        <%= number_field_tag :num, nil, min: 1, step: 1 , class: 'form-control form-control-dark text-bg-dark'%> <br/>
+        <%= label_tag("Input elements of array") %>
+        <%= text_field_tag :arr, "", class: 'form-control form-control-dark text-bg-dark' %> <br/>
+        <%= submit_tag "Перевести", class: "btn btn-outline-dark me-2"%>
+      <% end %>
+    </div>
+    <br>
+    <br>
+    <div class = "col-6">
+      <div style = "padding-top: 15px; padding-left: 50px" id = "result_area">
+
+      </div>
+      <div style = "padding-top: 15px; padding-left: 50px">
+        <table class = "table table-dark" >
+          <thead>
+          <td>
+            Номер отрезка
+          </td>
+          <td>
+            Отрезок
+          </td>
+          </thead>
+          <tbody id = "result" ></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div style = "padding-top: 15px">
+    <% flash.each do |type, msg| %>
+      <div class="alert alert-info">
+        <%= msg %>
+      </div>
+    <% end %>
+  </div>
+  <!--  <div class = 'col-2'>-->
+  <!--    <button type="button" class="btn btn-outline-dark me-2">Answer</button>-->
+  <!--  </div>-->
+</div>

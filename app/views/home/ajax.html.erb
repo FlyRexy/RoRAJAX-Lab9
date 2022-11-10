@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>myApp</title>
+  <meta name="csrf-param" content="authenticity_token" />
+  <meta name="csrf-token" content="I425ET7hyaksE2uhlBaRL17T5K-60QjwqG0a3LF3hHVnwL7WDPOkFOd7Li4B035pZqTJ1nffpsOFxrVU8Ow9jw" />
+
+
+  <link rel="stylesheet" href="/assets/application-2f09e3bb1438e779a2e25f3186b8f6cb2bbc45272970c1c4c983fb4f0aa1bd4b.css" data-turbo-track="reload" />
+  <script type="importmap" data-turbo-track="reload">{
+  "imports": {
+    "application": "/assets/application-6af9b35b3100bd6308b270a852a221849967bf1716e926d8e899e8d23b98ed92.js",
+    "@hotwired/turbo-rails": "/assets/turbo.min-7ab2ea9f35bae4a4d65b552f9b93524099f267a8ba3a2e07002aaa7bff8ae4cf.js",
+    "@hotwired/stimulus": "/assets/stimulus.min-2dae3fdcdb1a5ee8172d3dc02a2a10cd6d5f022cc7782b3888cedc06bab7388a.js",
+    "@hotwired/stimulus-loading": "/assets/stimulus-loading-1fc59770fb1654500044afd3f5f6d7d00800e5be36746d55b94a2963a7a228aa.js",
+    "controllers/application": "/assets/controllers/application-368d98631bccbf2349e0d4f8269afb3fe9625118341966de054759d96ea86c7e.js",
+    "controllers/hello_controller": "/assets/controllers/hello_controller-549135e8e7c683a538c3d6d517339ba470fcfb79d62f738a0a089ba41851a554.js",
+    "controllers": "/assets/controllers/index-8e8e471072f035b7d9a8a69ba19af42d5844f87d7c8e6ccbc35513fb21c0af21.js"
+  }
+}</script>
+  <link rel="modulepreload" href="/assets/application-6af9b35b3100bd6308b270a852a221849967bf1716e926d8e899e8d23b98ed92.js">
+  <link rel="modulepreload" href="/assets/turbo.min-7ab2ea9f35bae4a4d65b552f9b93524099f267a8ba3a2e07002aaa7bff8ae4cf.js">
+  <link rel="modulepreload" href="/assets/stimulus.min-2dae3fdcdb1a5ee8172d3dc02a2a10cd6d5f022cc7782b3888cedc06bab7388a.js">
+  <link rel="modulepreload" href="/assets/stimulus-loading-1fc59770fb1654500044afd3f5f6d7d00800e5be36746d55b94a2963a7a228aa.js">
+  <script src="/assets/es-module-shims.min-d89e73202ec09dede55fb74115af9c5f9f2bb965433de1c2446e1faa6dac2470.js" async="async" data-turbo-track="reload"></script>
+  <script type="module">import "application"</script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+  <script>
+      home_url = location.protocol + "//" + location.host +
+          "/home/result.json"
+      function send_query() {
+          var frm = document.forms.index_form;
+          var param_str = "?" + "num=" + frm.num.value + "&"+ "arr="+frm.arr.value
+          if (param_str == "?num=") return false;
+          if ((frm.arr.value.match(/^\d+(\s\d+)*$/) == null) || (Number(frm.num.value) != frm.arr.value.split(' ').length)) {
+            alert('Неправильный ввод');
+            return false
+          }
+          var my_JSON_object = {};
+          var http_request = new XMLHttpRequest();
+          http_request.open("GET", home_url + param_str, true);
+          http_request.onreadystatechange = function () {
+              var done = 4, ok = 200;
+              if (http_request.readyState == done &&
+                  http_request.status == ok) {
+                  my_JSON_object =
+                      JSON.parse(http_request.responseText);
+                  show_result(my_JSON_object);
+              }
+          };
+          http_request.send(null);
+          return false;
+      }
+      function show_result(data) {
+          var result = document.getElementById("result");
+          var result_area = document.getElementById("result_area")
+          arr = data.value
+          maxi = data.value2
+          if (arr.length == 0) {
+            alert("Количество отрезков равно нулю")
+            return false
+          }
+          for (let i = 0; i < arr.length; i++) {
+            result.innerHTML += '<tr>'+'<td>'+ (i+1).toString() +'</td>'+'<td>'+arr[i]+'</td>'+'</tr>'
+            console.log(arr[i])
+          }
+          result_area.innerHTML = 'Количество отрезков равно ' + arr.length + '<br>' + 'Самый длинный из них: ' + arr[maxi]
+          // const now = new Date();
+          // const current = now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
+          // document.getElementById("time").innerHTML = current
+      }
+  </script>
+</head>
+<body>
+  <div class = 'container'>
+    <div class = 'row'>
+      <div class = 'col-3'>
+        <br>
+        <form name="index_form" onsubmit="return send_query();">
+          <label for="Input number of elements in array">Input number of elements in array</label>
+          <br>
+          <input step="1" class="form-control form-control-dark text-bg-dark" min="1" max="300" type="number" name="num" id="num" />
+          <br>
+          <label for="Input elements of array">Input elements of array</label>
+          <br>
+          <textarea class="form-control form-control-dark text-bg-dark" name="arr" id="arr" cols="15" rows="1">
+</textarea>
+          <br>
+          <input type="submit" name="commit" value="Result" class="btn btn-outline-dark me-2" data-disable-with="Result" />
+        </form>  </div>
+      <div class = "col-6">
+        <div style = "padding-top: 15px; padding-left: 50px" id = "result_area">
+
+        </div>
+        <div style = "padding-top: 15px; padding-left: 50px">
+          <table class = "table table-dark" >
+            <thead>
+            <td>
+              Номер отрезка
+            </td>
+            <td>
+              Отрезок
+            </td>
+            </thead>
+            <tbody id = "result" ></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+
+    <br>
+    <br>
+    <div style = "padding-top: 15px">
+    </div>
+    <!--  <div class = 'col-2'>-->
+    <!--    <button type="button" class="btn btn-outline-dark me-2">Answer</button>-->
+    <!--  </div>-->
+  </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+</body>
+</html>
